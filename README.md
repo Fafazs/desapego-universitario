@@ -122,7 +122,15 @@ Compartilha dinâmicas de conexão com **OLX** e **Facebook Marketplace**, poré
 
 Mapeamento arquitetural das interações do sistema.
 
-### 5.1 Fluxo do Visitante (Visualização e Filtro)
+### 5.1 Diagrama de Casos de Uso (Visão Geral)
+
+<p align="center">
+  <img src="./docs/engenharia/caso-de-uso.png" alt="Diagrama de Casos de Uso" width="900">
+</p>
+
+Mapeamento geral das interações possíveis entre os atores do sistema (Visitante Não Autenticado e Aluno Autenticado) e as funcionalidades da plataforma.
+
+### 5.2 Fluxo do Visitante (Visualização e Filtro)
 
 <p align="center">
   <img src="./docs/engenharia/fluxo-visitante.png" alt="Fluxo do Visitante" width="900">
@@ -136,7 +144,7 @@ Mapeamento arquitetural das interações do sistema.
 6. O Frontend atualiza o estado e dispara `GET /api/ads?category=Livros`.
 7. O Backend adiciona a cláusula `WHERE` e devolve os dados atualizados para nova renderização.
 
-### 5.2 Fluxo de Autenticação (Login via Zustand)
+### 5.3 Fluxo de Autenticação (Login via Zustand)
 
 <p align="center">
   <img src="./docs/engenharia/fluxo-login.png" alt="Fluxo de Login" width="900">
@@ -148,7 +156,7 @@ Mapeamento arquitetural das interações do sistema.
 4. O Frontend (via Zustand) recebe o JWT e os dados, salvando-os automaticamente no `localStorage`.
 5. O usuário é redirecionado para a área restrita do PWA.
 
-### 5.3 Fluxo de Registro (Call To Action e Criação de Conta)
+### 5.4 Fluxo de Registro (Call To Action e Criação de Conta)
 
 <p align="center">
   <img src="./docs/engenharia/fluxo-registro.png" alt="Fluxo de Registro" width="900">
@@ -160,7 +168,7 @@ Mapeamento arquitetural das interações do sistema.
 4. O Backend aplica criptografia na senha e executa `INSERT INTO users`.
 5. Com sucesso (201 Created), o Frontend exibe feedback positivo e redireciona automaticamente o novo aluno para a tela de Login.
 
-### 5.4 Fluxo de Criação de Anúncio
+### 5.5 Fluxo de Criação de Anúncio
 
 <p align="center">
   <img src="./docs/engenharia/fluxo-anuncio.png" alt="Fluxo de Criação de Anúncio" width="900">
@@ -172,7 +180,7 @@ Mapeamento arquitetural das interações do sistema.
 4. O Backend valida o token, extrai o ID do usuário e insere o anúncio associado a ele no banco.
 5. O Frontend recebe o ID gerado, redirecionando automaticamente para a rota de detalhes daquele anúncio recém-criado.
 
-### 5.5 Fluxo de Interesse (Contatar Anunciante)
+### 5.6 Fluxo de Interesse (Contatar Anunciante)
 
 <p align="center">
   <img src="./docs/engenharia/fluxo-interesse.png" alt="Fluxo de Interesse" width="900">
@@ -183,6 +191,20 @@ Mapeamento arquitetural das interações do sistema.
 3. O Frontend captura o número do vendedor e o título do anúncio do estado atual.
 4. O Frontend formata uma mensagem padronizada (`encodeURIComponent`) e constrói a URL `wa.me`.
 5. O navegador abre o aplicativo WhatsApp para negociação direta, saindo do escopo da aplicação.
+
+### 5.7 Fluxo de Gerenciamento de Anúncio (Acervo e Exclusão)
+
+<p align="center">
+  <img src="./docs/engenharia/fluxo-gerenciamento.png" alt="Fluxo de Gerenciamento de Anúncio" width="900">
+</p>
+
+1. O usuário logado acessa a rota de "Meus Anúncios".
+2. O Frontend dispara `GET /api/ads/me` (enviando o token JWT no cabeçalho).
+3. O Backend valida a identidade e retorna apenas os anúncios onde o `user_id` seja correspondente.
+4. O usuário localiza um anúncio que deseja apagar e clica em "Excluir".
+5. O Frontend exibe um modal de confirmação e, se aceito, dispara `DELETE /api/ads/:id`.
+6. O Backend valida se o usuário é o dono do registro e executa a exclusão no banco de dados.
+7. O Frontend recebe o status 200 (OK) e remove o card da tela instantaneamente, atualizando o estado.
 
 ---
 
