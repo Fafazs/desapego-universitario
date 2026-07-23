@@ -125,7 +125,7 @@ Mapeamento arquitetural das interações do sistema.
 ### 5.1 Diagrama de Casos de Uso (Visão Geral)
 
 <p align="center">
-  <img src="./docs/engenharia/caso-de-uso.png" alt="Diagrama de Casos de Uso" width="900">
+  <img src="./docs/engenharia/casoUso.drawio.png" alt="Diagrama de Casos de Uso" width="900">
 </p>
 
 Mapeamento geral das interações possíveis entre os atores do sistema (Visitante Não Autenticado e Aluno Autenticado) e as funcionalidades da plataforma.
