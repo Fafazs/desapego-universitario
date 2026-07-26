@@ -230,13 +230,16 @@ A etapa de Engenharia de Software e Modelagem garante que o desenvolvimento do "
 
 ## 8. 🤖 Diário de Bordo da IA
 
-**Etapa #1: Engenharia de Requisitos, Modelagem e Arquitetura**
-* **Objetivo:** Interpretar o edital e converter os requisitos brutos em uma documentação de software padronizada, validando fluxos, regras de negócio e modelagem de dados antes de escrever qualquer código.
-* **Como a IA foi utilizada:**
-  * **Compreensão de Escopo e Negócio:** A IA atuou como parceira crítica de projeto para definir os limites do sistema. Debatemos o impacto de implementar um sistema próprio de chat, concluindo que o uso de links dinâmicos para o WhatsApp seria a solução técnica mais inteligente frente ao prazo do edital.
-  * **Melhoria da Visualização (Engenharia de Software):** Como o desenho de UMLs exige precisão, a IA ajudou a mapear minuciosamente os diagramas de atividade. Ela estruturou a lógica de "raias" (responsabilidades) detalhando o momento exato em que a ação sai do Usuário, passa pelo Frontend (e pelo *Router* do React), é validada pelo Backend via JWT e atinge o Banco de Dados. Isso eliminou "pontos cegos" na navegação.
-  * **Arquitetura e Banco de Dados (Evitando Superengenharia):** A IA foi fundamental para revisar as Formas Normais do banco de dados relacional. Discutimos a viabilidade técnica de isolar o número de telefone em uma terceira tabela; através da IA, validamos a adoção do princípio YAGNI (*You Aren't Gonna Need It*), mantendo o `whatsapp` na tabela de usuários devido ao contexto restrito (1:1), poupando tempo de consultas (`JOINs`) no banco e simplificando a lógica da API RESTful.
- 
+### Etapa #1: Engenharia de Requisitos, Modelagem e Arquitetura
+
+**Objetivo:** Interpretar o edital e converter os requisitos brutos em uma documentação de software padronizada, validando fluxos, regras de negócio e modelagem de dados antes de escrever qualquer código.
+
+**Como a IA foi utilizada:**
+* **Compreensão de Escopo e Negócio:** A IA atuou como parceira crítica de projeto para definir os limites do sistema. Debatemos o impacto de implementar um sistema próprio de chat, concluindo que o uso de links dinâmicos para o WhatsApp seria a solução técnica mais inteligente frente ao prazo do edital.
+* **Melhoria da Visualização (Engenharia de Software):** Como o desenho de UMLs exige precisão, a IA ajudou a mapear minuciosamente os diagramas de atividade. Ela estruturou a lógica de "raias" (responsabilidades) detalhando o momento exato em que a ação sai do Usuário, passa pelo Frontend (e pelo *Router* do React), é validada pelo Backend via JWT e atinge o Banco de Dados. Isso eliminou "pontos cegos" na navegação.
+* **Arquitetura e Banco de Dados (Evitando Superengenharia):** A IA foi fundamental para revisar as Formas Normais do banco de dados relacional. Discutimos a viabilidade técnica de isolar o número de telefone em uma terceira tabela; através da IA, validamos a adoção do princípio YAGNI (*You Aren't Gonna Need It*), mantendo o `whatsapp` na tabela de usuários devido ao contexto restrito (1:1), poupando tempo de consultas (`JOINs`) no banco e simplificando a lógica da API RESTful.
+
+---
 
 ### Etapa #2: Desenvolvimento Backend, API RESTful e Persistência de Dados
 
@@ -267,5 +270,7 @@ A etapa de Engenharia de Software e Modelagem garante que o desenvolvimento do "
 
 #### 🏆 Destaques para a Avaliação do Desafio
 * **Aderência aos Princípios RESTful:** Respeito absoluto aos verbos HTTP (`GET`, `POST`, `PUT`, `DELETE`), rotas baseadas em recursos no plural (`/ads`) e respostas estritamente semânticas com códigos de status apropriados (`200 OK`, `201 Created`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`).
+* **Arquitetura Pronta para Escalar:** O backend opera de forma desacoplada (*Client-Server*). A exata mesma API pode servir a aplicação React Web, um app React Native ou qualquer outra interface sem a necessidade de alterar uma linha de código do servidor.
+* **Controle de Acesso Granular (RBAC leve):** A API impede que um usuário mal-intencionado altere ou delete o anúncio de outro colega, mesmo que descubra o UUID do recurso.
 * **Arquitetura Pronta para Escalar:** O backend opera de forma desacoplada (*Client-Server*). A exata mesma API pode servir a aplicação React Web, um app React Native ou qualquer outra interface sem a necessidade de alterar uma linha de código do servidor.
 * **Controle de Acesso Granular (RBAC leve):** A API impede que um usuário mal-intencionado altere ou delete o anúncio de outro colega, mesmo que descubra o UUID do recurso.
