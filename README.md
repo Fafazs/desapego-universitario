@@ -236,3 +236,36 @@ A etapa de Engenharia de Software e Modelagem garante que o desenvolvimento do "
   * **Compreensão de Escopo e Negócio:** A IA atuou como parceira crítica de projeto para definir os limites do sistema. Debatemos o impacto de implementar um sistema próprio de chat, concluindo que o uso de links dinâmicos para o WhatsApp seria a solução técnica mais inteligente frente ao prazo do edital.
   * **Melhoria da Visualização (Engenharia de Software):** Como o desenho de UMLs exige precisão, a IA ajudou a mapear minuciosamente os diagramas de atividade. Ela estruturou a lógica de "raias" (responsabilidades) detalhando o momento exato em que a ação sai do Usuário, passa pelo Frontend (e pelo *Router* do React), é validada pelo Backend via JWT e atinge o Banco de Dados. Isso eliminou "pontos cegos" na navegação.
   * **Arquitetura e Banco de Dados (Evitando Superengenharia):** A IA foi fundamental para revisar as Formas Normais do banco de dados relacional. Discutimos a viabilidade técnica de isolar o número de telefone em uma terceira tabela; através da IA, validamos a adoção do princípio YAGNI (*You Aren't Gonna Need It*), mantendo o `whatsapp` na tabela de usuários devido ao contexto restrito (1:1), poupando tempo de consultas (`JOINs`) no banco e simplificando a lógica da API RESTful.
+ 
+
+### Etapa #2: Desenvolvimento Backend, API RESTful e Persistência de Dados
+
+**Objetivo:** Construir o núcleo de regras de negócio, autenticação e persistência de dados do sistema (*engine*), desenvolvendo uma API RESTful completa em Node.js com arquitetura MVC, banco de dados PostgreSQL (Supabase) e testes integrais via Postman.
+
+**Como a IA foi utilizada:**
+* **Arquitetura MVC e Decoupling (Separação de Responsabilidades):** A IA atuou como *pair programmer* para estruturar o backend estritamente no padrão MVC (Models, Controllers, Routes e Middlewares). Essa escolha garantiu um código limpo, sem arquivos monolíticos, separando a execução de queries SQL (`Models`) das validações de regras de negócio (`Controllers`) e das rotas do Express.
+* **Segurança e Protocolo Stateless:** Em conjunto com a IA, projetamos um fluxo de autenticação seguro. As senhas são criptografadas com `bcrypt` (fator de custo 10) antes da gravação no banco, e as sessões são gerenciadas de forma *stateless* através de Tokens JWT (`jsonwebtoken`). Foi implementado um *Middleware* de autorização para proteger rotas privadas, extraindo o ID do usuário diretamente do token assinado.
+* **Refatoração Ágil e Visão de Negócio (Campo "Curso"):** Durante a fase de testes, identificamos a oportunidade de vincular o curso acadêmico do usuário ao seu perfil. A IA avaliou o impacto arquitetural dessa alteração, concluindo que o custo técnico de refatoração naquele momento era baixíssimo frente ao alto valor de UX para um marketplace universitário. Executamos uma migração rápida em 3 passos (alteração de tabela SQL, *Model* e *Controller*) antes de avançar para o Frontend, evitando o retrabalho de alterar formulários posteriormente.
+* **Prevenção de Vulnerabilidades SQL:** A IA garantiu a escrita de consultas SQL puras totalmente parametrizadas (`$1, $2, ...`), impedindo ataques de *SQL Injection* no PostgreSQL e otimizando pesquisas com `JOIN` entre as tabelas `ads` e `users` para retornar dados do vendedor (Nome, WhatsApp e Curso) em uma única requisição.
+* **Validação Independente e Testes de Endpoints:** A IA guiou a elaboração da coleção de testes no Postman para validação do CRUD completo de anúncios, forçando cenários de borda (como tentativa de exclusão ou edição de anúncios por usuários que não eram os verdadeiros proprietários, retornando `403 Forbidden`).
+
+---
+
+#### 🌐 Rotas da API RESTful Implementadas
+
+| Método | Endpoint | Acesso | Descrição / Regra de Negócio |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Público | Cadastro de usuário com hash de senha (`bcrypt`) e vínculo de curso. |
+| `POST` | `/api/auth/login` | Público | Autenticação do usuário e geração de Token JWT. |
+| `GET` | `/api/ads` | Público | Feed de anúncios (Vitrine) com suporte a filtro por categoria e SQL `JOIN`. |
+| `POST` | `/api/ads` | Privado (JWT) | Criação de novos anúncios vinculados automaticamente ao ID do token. |
+| `GET` | `/api/ads/me` | Privado (JWT) | Listagem dos anúncios criados exclusivamente pelo usuário logado. |
+| `PUT` | `/api/ads/:id` | Privado (JWT) | Atualização de anúncio (valida se o `user_id` é o dono do recurso). |
+| `DELETE` | `/api/ads/:id` | Privado (JWT) | Remoção definitiva de anúncio (valida propriedade do recurso). |
+
+---
+
+#### 🏆 Destaques para a Avaliação do Desafio
+* **Aderência aos Princípios RESTful:** Respeito absoluto aos verbos HTTP (`GET`, `POST`, `PUT`, `DELETE`), rotas baseadas em recursos no plural (`/ads`) e respostas estritamente semânticas com códigos de status apropriados (`200 OK`, `201 Created`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`).
+* **Arquitetura Pronta para Escalar:** O backend opera de forma desacoplada (*Client-Server*). A exata mesma API pode servir a aplicação React Web, um app React Native ou qualquer outra interface sem a necessidade de alterar uma linha de código do servidor.
+* **Controle de Acesso Granular (RBAC leve):** A API impede que um usuário mal-intencionado altere ou delete o anúncio de outro colega, mesmo que descubra o UUID do recurso.
