@@ -239,9 +239,8 @@ A etapa de Engenharia de Software e Modelagem garante que o desenvolvimento do "
 * **Melhoria da Visualização (Engenharia de Software):** Como o desenho de UMLs exige precisão, a IA ajudou a mapear minuciosamente os diagramas de atividade. Ela estruturou a lógica de "raias" (responsabilidades) detalhando o momento exato em que a ação sai do Usuário, passa pelo Frontend (e pelo *Router* do React), é validada pelo Backend via JWT e atinge o Banco de Dados. Isso eliminou "pontos cegos" na navegação.
 * **Arquitetura e Banco de Dados (Evitando Superengenharia):** A IA foi fundamental para revisar as Formas Normais do banco de dados relacional. Discutimos a viabilidade técnica de isolar o número de telefone em uma terceira tabela; através da IA, validamos a adoção do princípio YAGNI (*You Aren't Gonna Need It*), mantendo o `whatsapp` na tabela de usuários devido ao contexto restrito (1:1), poupando tempo de consultas (`JOINs`) no banco e simplificando a lógica da API RESTful.
 
-* Exemplo de Prompt Complexo desta Etapa:
-
-"Atue como um Arquiteto de Software Sênior. Estou construindo um marketplace universitário onde os alunos podem doar ou vender itens. O prazo é de 15 dias. Considerando o tempo, avalie a viabilidade técnica entre construir um chat interno em tempo real via WebSockets vs. um redirecionamento parametrizado para o WhatsApp. Depois, com base na sua escolha, esculpa as tabelas SQL necessárias para usuários e anúncios na 3ª Forma Normal, garantindo que não criemos complexidade desnecessária (evitando superengenharia)."
+**Exemplo de Prompt Complexo desta Etapa:**
+> "Atue como um Arquiteto de Software Sênior. Estou construindo um marketplace universitário onde os alunos podem doar ou vender itens. O prazo é de 15 dias. Considerando o tempo, avalie a viabilidade técnica entre construir um chat interno em tempo real via WebSockets vs. um redirecionamento parametrizado para o WhatsApp. Depois, com base na sua escolha, esculpa as tabelas SQL necessárias para usuários e anúncios na 3ª Forma Normal, garantindo que não criemos complexidade desnecessária (evitando superengenharia)."
 
 ---
 
@@ -256,10 +255,8 @@ A etapa de Engenharia de Software e Modelagem garante que o desenvolvimento do "
 * **Prevenção de Vulnerabilidades SQL:** A IA garantiu a escrita de consultas SQL puras totalmente parametrizadas (`$1, $2, ...`), impedindo ataques de *SQL Injection* no PostgreSQL e otimizando pesquisas com `JOIN` entre as tabelas `ads` e `users` para retornar dados do vendedor (Nome, WhatsApp e Curso) em uma única requisição.
 * **Validação Independente e Testes de Endpoints:** A IA guiou a elaboração da coleção de testes no Postman para validação do CRUD completo de anúncios, forçando cenários de borda (como tentativa de exclusão ou edição de anúncios por usuários que não eram os verdadeiros proprietários, retornando `403 Forbidden`).
 
-* Exemplo de Prompt Complexo desta Etapa:
-
-"Preciso criar o ecossistema de autenticação da minha API Node.js/Express. Gere o código para um Controller de Usuários (registro e login) e um Middleware de proteção de rotas (JWT). Requisitos estritos: Use bcrypt com salt 10, evite retornar a senha no payload de resposta do registro, faça consultas parametrizadas com pg para evitar SQL Injection e retorne os códigos semânticos corretos (401 para token inválido, 403 para manipulação não autorizada de recursos de terceiros, etc)."
-
+**Exemplo de Prompt Complexo desta Etapa:**
+> "Preciso criar o ecossistema de autenticação da minha API Node.js/Express. Gere o código para um Controller de Usuários (registro e login) e um Middleware de proteção de rotas (JWT). Requisitos estritos: Use `bcrypt` com salt 10, evite retornar a senha no payload de resposta do registro, faça consultas parametrizadas com `pg` para evitar SQL Injection e retorne os códigos semânticos corretos (401 para token inválido, 403 para manipulação não autorizada de recursos de terceiros, etc)."
 ---
 
 #### 🌐 Rotas da API RESTful Implementadas
@@ -284,12 +281,27 @@ A etapa de Engenharia de Software e Modelagem garante que o desenvolvimento do "
 * **Controle de Acesso Granular (RBAC leve):** A API impede que um usuário mal-intencionado altere ou delete o anúncio de outro colega, mesmo que descubra o UUID do recurso.
 
 ### Etapa #3: Integração Frontend, Estado Global e Upload Físico de Arquivos
-Objetivo: Conectar a interface React com a API Node.js, gerenciar o estado global da aplicação na memória do navegador e implementar o upload de imagens reais, completando o ciclo de ponta a ponta.
 
-Como a IA foi utilizada:
+**Objetivo:** Conectar a interface React com a API Node.js, gerenciar o estado global da aplicação na memória do navegador e implementar o upload de imagens reais, completando o ciclo de ponta a ponta.
 
-Gerenciamento de Estado Global com Zustand: A IA orientou a estruturação de stores independentes (useAuthStore, useAdStore, useModalStore). Isso permitiu a atualização otimista da interface — refletindo adições, edições e exclusões de anúncios na Vitrine instantaneamente, sem necessidade de refresh (F5).
+**Como a IA foi utilizada:**
+* **Gerenciamento de Estado Global com Zustand:** A IA orientou a estruturação de *stores* independentes (`useAuthStore`, `useAdStore`, `useModalStore`). Isso permitiu a atualização otimista da interface — refletindo adições, edições e exclusões de anúncios na Vitrine instantaneamente, sem necessidade de *refresh* (F5).
+* **Filtros Otimizados em Memória:** Ao invés de disparar novas requisições HTTP para buscar os "Meus Anúncios", a IA sugeriu e implementou um filtro instantâneo via array iterativo no próprio Frontend, aliviando o tráfego do banco de dados e entregando uma UX de carregamento zero.
+* **Arquitetura de Upload Físico (Ponte Frontend-Backend-Nuvem):** A IA modelou a arquitetura multipart para imagens. Substituímos URLs estáticas de texto por arquivos de imagem reais (`File` API no frontend embutido em um `FormData`), interceptados pelo middleware Multer no backend, e enviados diretamente para o Supabase Storage.
 
-Filtros Otimizados em Memória: Ao invés de disparar novas requisições HTTP para buscar os "Meus Anúncios", a IA sugeriu e implementou um filtro instantâneo via array iterativo no próprio Frontend, aliviando o tráfego do banco de dados e entregando uma UX de carregamento zero.
+**Exemplo de Prompt Complexo desta Etapa:**
+> "Temos um bug no Typescript na store de modais (Zustand). O erro é `Property 'modalData' does not exist on type 'ModalState'`. O `EditAdModal` precisa receber os dados do anúncio a ser editado quando eu clico no botão de lápis. Como refatorar a interface `ModalState` do Zustand para suportar a injeção condicional de `data` na função `openModal` garantindo a tipagem correta, e como capturar isso dentro do componente visual via FormData para disparar um `PUT` na minha API?"
 
-Arquitetura de Upload Físico (Ponte Frontend-Backend-Nuvem): A IA modelou a arquitetura multipart para imagens. Substituímos URLs estáticas de texto por arquivos de imagem reais (File API no frontend embutido em um FormData), interceptados pelo middleware Multer no backend, e enviados diretamente para o Supabase Storage.
+---
+
+### Reflexão Crítica: Lidando com "Alucinações" e Ajustes de Contexto
+
+Durante o desenvolvimento profundo, presenciamos momentos em que o excesso de contexto fez a IA perder referências do projeto, exigindo intervenção analítica e *debugging* manual para recolocar a ferramenta nos trilhos:
+
+1. **O Colapso do Controller e das Rotas (`TypeError`):**
+   * **O Problema:** Durante a refatoração do código de imagens, a IA sugeriu erroneamente a remoção da rota de exclusividade `/me` e enviou um *snippet* parcial do `adController.js` omitindo as demais funções de listagem, junto do bloco `module.exports`. Ao compilar, o Node.js lançou um erro fatal: `TypeError: argument handler must be a function`.
+   * **A Solução:** Em vez de aceitar o código, analisei o *stack trace* do terminal e identifiquei que o Express estava esbarrando em um método de rotas que não possuía mais correspondência exportada no Controller. Forneci o `adModel.js` completo para a IA, obrigando-a a mapear exatamente os nomes das funções (ex: `getAdsByUser`) e reescrever o arquivo com a integridade das exportações do CommonJS restauradas.
+
+2. **O Bloqueio de Segurança no Supabase Storage (RLS):**
+   * **O Problema:** Ao finalizar a lógica do Multer e testar o envio de imagens via `FormData`, a aplicação crashou devolvendo um erro obscuro de banco: `StorageApiError: new row violates row-level security policy (Status: 400, 403)`.
+   * **A Solução:** Ao submeter o log de erro à IA, discutimos a infraestrutura do Supabase. A IA percebeu que o código utilizava a `SUPABASE_ANON_KEY` (Chave Pública/Anônima). Como o Storage estava protegido por políticas de segurança a nível de linha (RLS) para evitar spam, ele bloqueava as requisições. Como a nossa API (Node.js) já possuía uma camada sólida de proteção e autenticação via Middleware JWT, a solução arquitetônica correta, discutida e validada com a IA, foi migrar o cliente de backend para usar a `SUPABASE_SERVICE_KEY` (Service Role de Admin), resolvendo o gargalo de permissões e permitindo a gravação com sucesso das fotos na nuvem.
