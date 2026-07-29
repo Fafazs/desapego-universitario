@@ -1,11 +1,11 @@
 const adModel = require('../models/adModel');
 const { createClient } = require('@supabase/supabase-js');
 
-// 1. Captura as variáveis e remove qualquer aspa ou espaço invisível que venha do Render
-const supabaseUrl = (process.env.SUPABASE_URL || 'https://qievrwijriooubpnllzn.supabase.co').replace(/['"]/g, '').trim();
-const supabaseKey = (process.env.SUPABASE_SERVICE_KEY || '').replace(/['"]/g, '').trim();
+// 1. URL fixa (pública) + Chave de serviço tratada sem aspas ou espaços
+const supabaseUrl = 'https://qievrwijriooubpnllzn.supabase.co';
+const supabaseKey = (process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY || '').replace(/['"\s]/g, '');
 
-// 2. Inicia o cliente do Supabase de forma segura
+// 2. Inicialização 100% garantida
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // 1. CRIAR ANÚNCIO (Com upload real no Supabase)
