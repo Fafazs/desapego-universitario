@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User } from '../types/user'; // Certifique-se de que a tipagem existe
+import type { User } from '../types/User' // Certifique-se de que a tipagem existe
 
 interface AuthState {
   user: User | null;
