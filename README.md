@@ -391,3 +391,12 @@ Durante o desenvolvimento profundo, presenciamos momentos em que o excesso de co
 * **Configuração do PWA e Cache:** A IA guiou a estrutura do manifesto da aplicação (`manifest.json`) e a escrita do *Service Worker* básico (`sw.js`). Implementamos estratégias de cache para ativos estáticos e o registro do script diretamente no ciclo de vida principal da aplicação (`main.tsx`).
 * **Regra de Negócio para Doações (Gratuidade):** Ajustamos as validações no *Frontend* (no modal de criação de anúncios) para aceitar o valor `0.00`, adicionando um *toggle/checkbox* intuitivo ("Quero doar este item"). 
 * **Refinamento Visual da Vitrine:** Atualizamos a lógica do componente de anúncios (`AdCard`) para reconhecer itens com valor zero e renderizar dinamicamente uma *badge* destacada em verde esmeralda com o rótulo **DOAÇÃO**, substituindo o formato padrão em Reais (R$).
+
+### Etapa #6: Finalização, Deploy e Testes de Produção
+
+**Objetivo:** Colocar a infraestrutura completa no ar, garantindo a comunicação segura entre o Frontend (Vercel), Backend (Render) e Banco de Dados (Supabase), além de validar a instalação do PWA em dispositivos móveis.
+
+**Como a IA foi utilizada:**
+* **Estratégia de Deploy Contínuo:** A IA auxiliou na configuração dos ambientes de produção, garantindo que as variáveis de ambiente (`.env`) estivessem corretas nos painéis da Vercel e do Render. Discutimos a configuração de CORS no backend para aceitar requisições exclusivamente da URL de produção da Vercel, blindando a API contra acessos externos indesejados.
+* **Troubleshooting de Infraestrutura (O Paradoxo do Windows vs. Linux):** Durante o deploy na Vercel, a aplicação apresentou o clássico erro `404 Not Found` na página principal, apesar de rodar perfeitamente no ambiente de desenvolvimento local. Submetendo os logs de build à IA, identificamos um problema crônico de *case sensitivity*: o Windows e o VS Code ignoram diferenças entre maiúsculas e minúsculas (`ad.ts` vs `Ad.ts`), mas o servidor Linux da Vercel é estritamente sensível a essa tipografia. A IA forneceu os comandos exatos de `git mv` para forçar o Git a registrar a renomeação dos arquivos, destravando o build.
+* **Resolução de Bugs em Memória (Zustand):** Nos testes finais, o modal de detalhes do anúncio parou de abrir. Usando a IA como *debugger*, mapeamos um desencontro na nomenclatura das variáveis globais entre o estado do Zustand (`modalData`) e a chamada no componente (`selectedAd`), corrigindo a renderização instantaneamente.
