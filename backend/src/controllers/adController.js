@@ -20,14 +20,14 @@ const create = async (req, res) => {
       const fileName = `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`;
 
       const { data, error } = await supabase.storage
-        .from('ads')
+        .from('uploads')
         .upload(fileName, file.buffer, {
           contentType: file.mimetype,
         });
 
       if (error) throw error;
 
-      const { data: publicUrlData } = supabase.storage.from('ads').getPublicUrl(fileName);
+      const { data: publicUrlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
       imageUrl = publicUrlData.publicUrl;
     } else {
       imageUrl = req.body.image_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500';
