@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, LogIn } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useModalStore } from '../../store/useModalStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { api } from '../../services/api';

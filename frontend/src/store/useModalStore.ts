@@ -4,8 +4,9 @@ import { create } from 'zustand';
 export type ModalType = 'login' | 'register' | 'createAd' | 'adDetail' | 'editAd' | null;
 
 interface ModalState {
-  activeModal: ModalType;
-  modalData: any; // Informamos ao TS que modalData existe (usamos any para suportar diferentes modais)
+  modalData: any;
+  activeModal: string | null;
+  selectedAd?: any; // Informamos ao TS que modalData existe (usamos any para suportar diferentes modais)
   openModal: (modal: ModalType, data?: any) => void; // openModal agora aceita receber os dados
   closeModal: () => void;
 }

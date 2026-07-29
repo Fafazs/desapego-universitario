@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useModalStore } from '../../store/useModalStore';
-import { useAuthStore } from '../../store/useAuthStore';
 import { api } from '../../services/api';
 import styles from './Modal.module.css';
 
 export const RegisterModal: React.FC = () => {
   const { activeModal, closeModal, openModal } = useModalStore();
-  const { setAuth } = useAuthStore();
 
   const [formData, setFormData] = useState({
     name: '',
