@@ -1,0 +1,21 @@
+{
+  "short_name": "Desapego",
+  "name": "Desapego Universitário UNIFOR",
+  "description": "Marketplace acadêmico para facilitar a doação e venda de materiais universitários.",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2563EB",
+  "background_color": "#F4F7FB",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

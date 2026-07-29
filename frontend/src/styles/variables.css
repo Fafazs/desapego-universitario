@@ -1,20 +1,27 @@
 :root {
-  /* Cores Principais */
-  --primary: #4f46e5;         /* Indigo/Roxo universitário moderno */
-  --primary-hover: #4338ca;
-  --secondary: #10b981;       /* Verde WhatsApp/Sucesso */
-  --secondary-hover: #059669;
+  /* Cores Principais (Identidade Unifor) */
+  --primary: #0044CC;         /* Azul Forte Institucional */
+  --primary-hover: #003399;   /* Azul Escuro para interações (Hover) */
+
+  /* Cores Secundárias e Ações */
+  --secondary: #F97316;       /* Laranja Desapego (Call to Action/Tags de alerta) */
+  --secondary-hover: #EA580C; /* Laranja mais escuro para hover */
+  --whatsapp: #10b981;        /* Verde padrão para o botão de contato */
+  --whatsapp-hover: #059669;
 
   /* Neutros / Backgrounds */
-  --bg-main: #f9fafb;
-  --bg-card: #ffffff;
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --border-color: #e5e7eb;
+  --bg-main: #F4F7FB;         /* Fundo geral levemente azulado para não cansar a vista */
+  --bg-card: #FFFFFF;         /* Fundo branco puro para os cards e modais */
+  --bg-active: #E5EFFF;       /* Azul Gelo para itens selecionados/abas ativas */
+
+  /* Tipografia */
+  --text-primary: #1E293B;    /* Quase preto azulado (mais suave que preto puro) */
+  --text-secondary: #64748B;  /* Cinza médio para textos descritivos */
+  --border-color: #CBD5E1;    /* Borda suave combinando com a paleta fria */
 
   /* Sombras e Bordas */
-  --radius: 12px;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --radius: 12px;             /* Bordas amigáveis e modernas */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 30, 80, 0.05);     /* Sombra com tom sutil de azul */
+  --shadow-md: 0 4px 6px -1px rgba(0, 30, 80, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 30, 80, 0.1);
 }

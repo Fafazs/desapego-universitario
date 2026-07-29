@@ -2,12 +2,14 @@ import React from 'react';
 import { ShoppingBag, ShieldCheck, Sparkles } from 'lucide-react';
 import { useModalStore } from '../../../store/useModalStore';
 import styles from './Hero.module.css';
+import student from '../../../assets/studentA.png';
+import university from '../../../assets/campos.webp';
 
 export const Hero: React.FC = () => {
   const { openModal } = useModalStore();
 
   return (
-    <section id="inicio" className={styles.hero}>
+    <section id="inicio" className={styles.hero} style={{ backgroundImage: `linear-gradient(rgba(0, 34, 102, 0.6), rgba(15, 23, 42, 0.9)), url(${university})` }}>
       <div className={styles.container}>
         <div>
           <div className={styles.badge}>
@@ -38,38 +40,40 @@ export const Hero: React.FC = () => {
             </button>
           </div>
         </div>
-
-        {/* Card Ilustrativo simulando a proposta de valor */}
+         {/* Container da Imagem com Widgets Flutuantes */}
         <div className={styles.illustration}>
-          <div className={styles.cardPreview}>
-            <div className={styles.cardHeader}>
-              <ShieldCheck size={28} color="var(--secondary)" />
+          <div className={styles.imageWrapper}>
+            
+            {/* Fundo decorativo para destacar o estudante */}
+            <div className={styles.imageBackdrop}></div>
+            
+            <img src={student} alt="Estudante" className={styles.studentImage} />
+            
+            {/* Widget Flutuante 1: Conexão Direta (Topo Esquerda) */}
+            <div className={`${styles.floatingCard} ${styles.cardTop}`}>
+              <ShieldCheck size={24} color="var(--primary)" />
               <div>
-                <strong>Conexão Direta</strong>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                  Negocie direto pelo WhatsApp
+                <strong style={{ color: 'var(--text-primary)', fontSize: '0.9rem', display: 'block' }}>Conexão Direta</strong>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>
+                  Negocie pelo WhatsApp
                 </p>
               </div>
             </div>
-            
-            <div style={{
-              background: '#f3f4f6', 
-              height: '130px', 
-              borderRadius: '8px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              margin: '1rem 0'
-            }}>
-              <span style={{ fontSize: '2.5rem' }}>📚 💻 🔬</span>
+
+            {/* Widget Flutuante 2: Economia Circular (Base Direita) */}
+            <div className={`${styles.floatingCard} ${styles.cardBottom}`}>
+              <span className={styles.cardTag}>Economia Circular</span>
+              <h4 style={{ marginTop: '0.4rem', marginBottom: '0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
+                Apoie colegas do curso
+              </h4>
+              <div className={styles.iconShowcase}>
+                <span style={{ fontSize: '1.25rem' }}>📚 💻 🔬</span>
+              </div>
             </div>
 
-            <span className={styles.cardTag}>Economia Circular</span>
-            <h4 style={{ marginTop: '0.5rem', color: 'var(--text-primary)' }}>
-              Apoie os colegas do seu próprio curso
-            </h4>
           </div>
         </div>
+         
       </div>
     </section>
   );

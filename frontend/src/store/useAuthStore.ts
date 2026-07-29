@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { User } from '../types/user';
+import { persist } from 'zustand/middleware';
+import type { User } from '../types/user'; // Certifique-se de que a tipagem existe
 
 interface AuthState {
   user: User | null;
@@ -8,19 +9,16 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: JSON.parse(localStorage.getItem('@desapego:user') || 'null'),
-  token: localStorage.getItem('@desapego:token') || null,
-
-  setAuth: (user, token) => {
-    localStorage.setItem('@desapego:user', JSON.stringify(user));
-    localStorage.setItem('@desapego:token', token);
-    set({ user, token });
-  },
-
-  logout: () => {
-    localStorage.removeItem('@desapego:user');
-    localStorage.removeItem('@desapego:token');
-    set({ user: null, token: null });
-  },
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      setAuth: (user, token) => set({ user, token }),
+      logout: () => set({ user: null, token: null }),
+    }),
+    {
+      name: 'desapego-auth-storage', // Nome da chave que ficará salva no LocalStorage
+    }
+  )
+);

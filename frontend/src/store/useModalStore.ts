@@ -1,18 +1,22 @@
 import { create } from 'zustand';
-import type { Ad } from '../types/ad';
 
-type ModalType = 'login' | 'register' | 'createAd' | 'adDetail' | null;
+// Adicionamos o 'editAd' na lista de modais permitidos
+export type ModalType = 'login' | 'register' | 'createAd' | 'adDetail' | 'editAd' | null;
 
 interface ModalState {
   activeModal: ModalType;
-  selectedAd: Ad | null;
-  openModal: (modal: ModalType, ad?: Ad | null) => void;
+  modalData: any; // Informamos ao TS que modalData existe (usamos any para suportar diferentes modais)
+  openModal: (modal: ModalType, data?: any) => void; // openModal agora aceita receber os dados
   closeModal: () => void;
 }
 
 export const useModalStore = create<ModalState>((set) => ({
   activeModal: null,
-  selectedAd: null,
-  openModal: (modal, ad = null) => set({ activeModal: modal, selectedAd: ad }),
-  closeModal: () => set({ activeModal: null, selectedAd: null }),
+  modalData: null,
+  
+  // Quando abrimos um modal, guardamos também a informação (ex: os dados do anúncio)
+  openModal: (modal, data = null) => set({ activeModal: modal, modalData: data }),
+  
+  // Quando fechamos, limpamos tudo
+  closeModal: () => set({ activeModal: null, modalData: null }),
 }));

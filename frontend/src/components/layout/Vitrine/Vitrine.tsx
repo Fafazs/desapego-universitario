@@ -1,80 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Search, PackageOpen } from 'lucide-react';
-import type { Ad } from '../../../types/ad';
 import { AdCard } from './AdCard';
 import { api } from '../../../services/api';
+import { useAdStore } from '../../../store/useAdStore';
+import { useAuthStore } from '../../../store/useAuthStore'; // <-- Adicionado para saber quem está logado
 import styles from './Vitrine.module.css';
 
 const CATEGORIES = ['Todos', 'Livros', 'Eletrônicos', 'Móveis', 'Materiais', 'Outros'];
 
-// Dados simulados para garantir que a UI mostre cards mesmo se o backend estiver offline
-const DEMO_ADS: Ad[] = [
-  {
-    id: '1',
-    title: 'Cálculo Volume 1 - James Stewart (8ª Edição)',
-    description: 'Livro em ótimo estado de conservação, sem grifos nas páginas. Essencial para Engenharias.',
-    price: 85.00,
-    category: 'Livros',
-    image_url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500',
-    created_at: new Date().toISOString(),
-    user_id: 'u1',
-    user_name: 'Lucas Mendes',
-    user_course: 'Engenharia Civil',
-    user_whatsapp: '88999999999'
-  },
-  {
-    id: '2',
-    title: 'Calculadora Científica Casio FX-991EX',
-    description: 'Funcionando 100%. Com tampa de proteção e bateria nova.',
-    price: 120.00,
-    category: 'Eletrônicos',
-    image_url: 'https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48a?w=500',
-    created_at: new Date().toISOString(),
-    user_id: 'u2',
-    user_name: 'Mariana Lima',
-    user_course: 'Ciência da Computação',
-    user_whatsapp: '88988888888'
-  },
-  {
-    id: '3',
-    title: 'Jaleco Branco Algodão M - Unissex',
-    description: 'Usado por 1 semestre na disciplina de química orgânica. Higienizado.',
-    price: 45.00,
-    category: 'Materiais',
-    image_url: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=500',
-    created_at: new Date().toISOString(),
-    user_id: 'u3',
-    user_name: 'Beatriz Rocha',
-    user_course: 'Medicina',
-    user_whatsapp: '88977777777'
-  }
-];
-
 export const Vitrine: React.FC = () => {
-  const [ads, setAds] = useState<Ad[]>(DEMO_ADS);
+  const { ads, setAds } = useAdStore();
+  const { user } = useAuthStore(); // <-- Pegamos o usuário logado
+  
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [loading, setLoading] = useState(true);
+  
+  // Novo estado para controlar se vemos "Todos" ou "Meus Anúncios"
+  const [viewFilter, setViewFilter] = useState<'all' | 'mine'>('all');
 
+  // Busca os dados reais do Banco de Dados
   useEffect(() => {
-    // Busca os anúncios reais da API REST Node.js
+    setLoading(true);
     api.get('/ads')
       .then((response) => {
-        if (response.data && response.data.length > 0) {
-          setAds(response.data);
-        }
+        setAds(response.data);
       })
-      .catch(() => {
-        console.log('Usando dados de demonstração para a Vitrine');
+      .catch((error) => {
+        console.error('Erro ao buscar anúncios do banco:', error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, []);
+  }, [setAds]);
 
-  // Lógica de busca e filtragem por categoria
   const filteredAds = ads.filter((ad) => {
     const matchesSearch = ad.title.toLowerCase().includes(search.toLowerCase()) ||
                           ad.description.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || ad.category === selectedCategory;
     
-    return matchesSearch && matchesCategory;
+    // Nova regra: Filtra pelos anúncios do usuário se a aba "mine" estiver ativa
+    const matchesOwnership = viewFilter === 'all' || ad.user_id === user?.id;
+    
+    return matchesSearch && matchesCategory && matchesOwnership;
   });
 
   return (
@@ -85,7 +53,51 @@ export const Vitrine: React.FC = () => {
       </div>
 
       <div className={styles.controls}>
-        {/* Barra de Busca */}
+        
+        {/* Toggle de Filtro: Só aparece se o usuário estiver logado */}
+        {user && (
+          <div style={{ 
+            display: 'flex', 
+            gap: '0.5rem', 
+            marginBottom: '1.5rem', 
+            background: 'var(--surface-50, #f8fafc)', 
+            padding: '0.35rem', 
+            borderRadius: '0.5rem', 
+            width: 'fit-content' 
+          }}>
+            <button 
+              onClick={() => setViewFilter('all')}
+              style={{
+                padding: '0.5rem 1rem',
+                border: 'none',
+                borderRadius: '0.25rem',
+                cursor: 'pointer',
+                fontWeight: 500,
+                background: viewFilter === 'all' ? 'var(--primary, #2563eb)' : 'transparent',
+                color: viewFilter === 'all' ? 'white' : 'var(--text-secondary, #64748b)',
+                transition: 'all 0.2s'
+              }}
+            >
+              Todos os Anúncios
+            </button>
+            <button 
+              onClick={() => setViewFilter('mine')}
+              style={{
+                padding: '0.5rem 1rem',
+                border: 'none',
+                borderRadius: '0.25rem',
+                cursor: 'pointer',
+                fontWeight: 500,
+                background: viewFilter === 'mine' ? 'var(--primary, #2563eb)' : 'transparent',
+                color: viewFilter === 'mine' ? 'white' : 'var(--text-secondary, #64748b)',
+                transition: 'all 0.2s'
+              }}
+            >
+              Meus Anúncios
+            </button>
+          </div>
+        )}
+
         <div className={styles.searchBar}>
           <Search size={20} className={styles.searchIcon} />
           <input 
@@ -97,7 +109,6 @@ export const Vitrine: React.FC = () => {
           />
         </div>
 
-        {/* Filtro de Categorias */}
         <div className={styles.categories}>
           {CATEGORIES.map((cat) => (
             <button
@@ -111,8 +122,11 @@ export const Vitrine: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid de Anúncios */}
-      {filteredAds.length > 0 ? (
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+          Carregando anúncios...
+        </div>
+      ) : filteredAds.length > 0 ? (
         <div className={styles.grid}>
           {filteredAds.map((ad) => (
             <AdCard key={ad.id} ad={ad} />
@@ -123,7 +137,9 @@ export const Vitrine: React.FC = () => {
           <PackageOpen size={48} className={styles.emptyStateIcon} />
           <h3>Nenhum item encontrado</h3>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-            Tente buscar com outros termos ou selecione outra categoria.
+            {viewFilter === 'mine' 
+              ? 'Você ainda não publicou nenhum anúncio.' 
+              : 'Ainda não há anúncios nesta categoria ou com este nome.'}
           </p>
         </div>
       )}

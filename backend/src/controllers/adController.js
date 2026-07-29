@@ -1,93 +1,112 @@
 const adModel = require('../models/adModel');
+const { createClient } = require('@supabase/supabase-js');
 
-// Criar Anúncio (Requer Token)
+// Inicia o cliente do Supabase
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+
+// 1. CRIAR ANÚNCIO (Com upload real no Supabase)
 const create = async (req, res) => {
   try {
-    const { title, description, category, price, image_url } = req.body;
-    const userId = req.user.id; // Vem lá do nosso authMiddleware!
+    const { title, description, category, price } = req.body;
+    const userId = req.user.id;
+    let imageUrl = null;
 
-    const newAd = await adModel.createAd(title, description, category, price, image_url, userId);
+    if (req.file) {
+      const file = req.file;
+      const fileName = `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`;
+
+      const { data, error } = await supabase.storage
+        .from('ads')
+        .upload(fileName, file.buffer, {
+          contentType: file.mimetype,
+        });
+
+      if (error) throw error;
+
+      const { data: publicUrlData } = supabase.storage.from('ads').getPublicUrl(fileName);
+      imageUrl = publicUrlData.publicUrl;
+    } else {
+      imageUrl = req.body.image_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500';
+    }
+
+    const newAd = await adModel.createAd(title, description, category, price, imageUrl, userId);
     res.status(201).json(newAd);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro ao criar anúncio.' });
+    console.error('Erro ao criar anúncio:', error);
+    res.status(500).json({ error: 'Erro ao criar anúncio com imagem.' });
   }
 };
 
-// Listar todos os anúncios / Vitrine Pública (Não requer Token)
+// 2. LISTAR TODOS
 const listAll = async (req, res) => {
   try {
-    const category = req.query.category; // Ex: /api/ads?category=Livros
-    const ads = await adModel.getAllAds(category);
+    const category = req.query.category; // Aproveitando que seu model suporta isso!
+    const ads = await adModel.getAllAds(category); 
     res.status(200).json(ads);
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao listar todos:', error);
     res.status(500).json({ error: 'Erro ao buscar anúncios.' });
   }
 };
 
-// Listar anúncios do usuário logado (Requer Token)
+// 3. LISTAR MEUS ANÚNCIOS
 const listMine = async (req, res) => {
   try {
     const userId = req.user.id;
-    const ads = await adModel.getAdsByUser(userId);
+    const ads = await adModel.getAdsByUser(userId); // <-- Nome corrigido batendo com seu model!
     res.status(200).json(ads);
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao listar meus anúncios:', error);
     res.status(500).json({ error: 'Erro ao buscar seus anúncios.' });
   }
 };
 
-// Deletar anúncio (Requer Token e ser o dono do anúncio)
-const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const userId = req.user.id;
-
-    const ad = await adModel.getAdById(id);
-    
-    if (!ad) {
-      return res.status(404).json({ error: 'Anúncio não encontrado.' });
-    }
-
-    // Verifica se o cara que tá tentando deletar é o dono do anúncio
-    if (ad.user_id !== userId) {
-      return res.status(403).json({ error: 'Você só pode deletar seus próprios anúncios.' });
-    }
-
-    await adModel.deleteAd(id);
-    res.status(200).json({ message: 'Anúncio deletado com sucesso.' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro ao deletar anúncio.' });
-  }
-};
-
-// Atualizar anúncio (Requer Token e ser o dono do anúncio)
+// 4. ATUALIZAR ANÚNCIO (Com suporte para trocar a foto)
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id; // Pego do Token JWT
-    const { title, description, category, price, image_url } = req.body;
+    const { title, description, category, price } = req.body;
+    let imageUrl = req.body.image_url; 
 
-    // 1. Verifica se o anúncio existe
-    const ad = await adModel.getAdById(id);
-    if (!ad) {
-      return res.status(404).json({ error: 'Anúncio não encontrado.' });
+    if (req.file) {
+      const file = req.file;
+      const fileName = `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`;
+
+      const { data, error } = await supabase.storage
+        .from('ads')
+        .upload(fileName, file.buffer, { contentType: file.mimetype });
+
+      if (error) throw error;
+
+      const { data: publicUrlData } = supabase.storage.from('ads').getPublicUrl(fileName);
+      imageUrl = publicUrlData.publicUrl;
     }
 
-    // 2. Verifica se o usuário logado é o dono do anúncio
-    if (ad.user_id !== userId) {
-      return res.status(403).json({ error: 'Você só pode editar seus próprios anúncios.' });
-    }
-
-    // 3. Atualiza no banco
-    const updatedAd = await adModel.updateAd(id, title, description, category, price, image_url);
+    const updatedAd = await adModel.updateAd(id, title, description, category, price, imageUrl);
     res.status(200).json(updatedAd);
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao atualizar:', error);
     res.status(500).json({ error: 'Erro ao atualizar anúncio.' });
   }
 };
 
-module.exports = { create, listAll, listMine, remove, update };
+// 5. DELETAR ANÚNCIO
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await adModel.deleteAd(id); 
+    res.status(200).json({ message: 'Anúncio removido com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao remover:', error);
+    res.status(500).json({ error: 'Erro ao remover anúncio.' });
+  }
+};
+
+// EXPORTANDO AS FUNÇÕES CORRETAMENTE
+module.exports = {
+  create,
+  listAll,
+  listMine,
+  update,
+  remove
+};
