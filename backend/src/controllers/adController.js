@@ -1,8 +1,12 @@
 const adModel = require('../models/adModel');
 const { createClient } = require('@supabase/supabase-js');
 
-// Inicia o cliente do Supabase
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+// 1. Captura as variáveis e remove qualquer aspa ou espaço invisível que venha do Render
+const supabaseUrl = (process.env.SUPABASE_URL || 'https://qievrwijriooubpnllzn.supabase.co').replace(/['"]/g, '').trim();
+const supabaseKey = (process.env.SUPABASE_SERVICE_KEY || '').replace(/['"]/g, '').trim();
+
+// 2. Inicia o cliente do Supabase de forma segura
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // 1. CRIAR ANÚNCIO (Com upload real no Supabase)
 const create = async (req, res) => {
