@@ -25,3 +25,15 @@ self.addEventListener('fetch', (event) => {
       })
   );
 });
+
+// Dentro do seu sw.js:
+self.addEventListener('fetch', (event) => {
+  const url = event.request.url;
+
+  // 🛑 IGNOORA requisições para a API do Render ou métodos que não sejam GET (POST/PUT/DELETE)
+  if (event.request.method !== 'GET' || url.includes('onrender.com') || url.includes('/ads') || url.includes('/auth')) {
+    return; // Deixa o navegador fazer a requisição HTTP normal sem passar pelo Service Worker
+  }
+
+  // ... (o restante da sua lógica de cache do PWA continua aqui abaixo)
+});
