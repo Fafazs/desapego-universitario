@@ -2,21 +2,28 @@ import React from 'react';
 import { X, MessageCircle, Lock, User, GraduationCap } from 'lucide-react';
 import { useModalStore } from '../../store/useModalStore';
 import { useAuthStore } from '../../store/useAuthStore';
+import type { Ad } from '../../types/ad';
 import styles from './Modal.module.css';
 
 export const AdDetailModal: React.FC = () => {
-  const { activeModal, selectedAd, closeModal, openModal } = useModalStore();
+  const { activeModal, modalData, closeModal, openModal } = useModalStore();
   const { user } = useAuthStore();
 
+  // Resgatamos o anúncio através do modalData enviado pelo AdCard
+  const selectedAd = modalData as Ad;
+
   if (activeModal !== 'adDetail' || !selectedAd) return null;
+
+  const isDonation = Number(selectedAd.price) === 0;
 
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
   }).format(selectedAd.price);
 
-  const whatsappUrl = `https://wa.me/55${selectedAd.user_whatsapp}?text=${encodeURIComponent(
-    `Olá ${selectedAd.user_name || 'vendedor'}, vi seu anúncio "${selectedAd.title}" no Desapego Universitário e tenho interesse!`
+  // Usando seller_whatsapp e seller_name para bater com a estrutura do AdCard
+  const whatsappUrl = `https://wa.me/55${selectedAd.seller_whatsapp}?text=${encodeURIComponent(
+    `Olá ${selectedAd.seller_name || 'vendedor'}, vi seu anúncio "${selectedAd.title}" no Desapego Universitário e tenho interesse!`
   )}`;
 
   return (
@@ -36,14 +43,21 @@ export const AdDetailModal: React.FC = () => {
           <div className={styles.detailInfo}>
             <span className={styles.badge}>{selectedAd.category}</span>
             <h2 className={styles.title}>{selectedAd.title}</h2>
-            <div className={styles.price}>{formattedPrice}</div>
+            
+            {isDonation ? (
+              <div style={{ color: '#10B981', fontWeight: 700, fontSize: '1.25rem', margin: '0.5rem 0' }}>
+                DOAÇÃO GRATUITA
+              </div>
+            ) : (
+              <div className={styles.price}>{formattedPrice}</div>
+            )}
             
             <p className={styles.description}>{selectedAd.description}</p>
 
             <div className={styles.sellerBox}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem' }}>
                 <User size={16} />
-                <strong>{selectedAd.user_name || 'Estudante'}</strong>
+                <strong>{selectedAd.seller_name || 'Estudante'}</strong>
               </div>
               {selectedAd.user_course && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
