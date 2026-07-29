@@ -315,3 +315,12 @@ Durante o desenvolvimento profundo, presenciamos momentos em que o excesso de co
 * **Responsividade e Adaptação Mobile (PWA):** Revisamos a estrutura de estilização (CSS Modules) para garantir que os elementos se adaptassem organicamente a qualquer tamanho de tela. O layout de grade (`Grid`), que exibe múltiplas colunas no desktop, foi ajustado via *Media Queries* para quebrar de forma elegante para telas menores (tablets e celulares), garantindo usabilidade perfeita quando a aplicação for instalada como um app nativo.
 * **Interatividade e Captação de Cliques:** Refinamos os detalhes de interação dos componentes, adicionando transições suaves e efeitos de *hover* (como o deslocamento no eixo Y dos cards) para fornecer feedback visual imediato. Otimizamos o espaçamento e a área de captação de cliques nos botões de *Call to Action* (CTA), tornando a navegação intuitiva e estimulando o usuário a anunciar ou buscar itens.
 * **Alinhamento e Integração de Ícones:** Os ícones da interface receberam um tratamento especial com fundos suavizados e cores vibrantes para se integrarem ao design premium. O alinhamento dos textos foi ajustado para a esquerda, abandonando um visual genérico e adotando uma estética analítica, profissional e muito comum em plataformas SaaS e Fintechs.
+
+### Etapa #5: Implementação de PWA, Economia Circular e Funcionalidades de Doação
+
+**Objetivo:** Converter a aplicação web em um Progressive Web App (PWA) instalável e ajustar o fluxo de cadastro e listagem para suportar itens gratuitos (doações), atendendo plenamente à proposta de economia circular no campus.
+
+**Como a IA foi utilizada na execução técnica:**
+* **Configuração do PWA e Cache:** A IA guiou a estrutura do manifesto da aplicação (`manifest.json`) e a escrita do *Service Worker* básico (`sw.js`). Implementamos estratégias de cache para ativos estáticos e o registro do script diretamente no ciclo de vida principal da aplicação (`main.tsx`).
+* **Regra de Negócio para Doações (Gratuidade):** Ajustamos as validações no *Frontend* (no modal de criação de anúncios) para aceitar o valor `0.00`, adicionando um *toggle/checkbox* intuitivo ("Quero doar este item"). 
+* **Refinamento Visual da Vitrine:** Atualizamos a lógica do componente de anúncios (`AdCard`) para reconhecer itens com valor zero e renderizar dinamicamente uma *badge* destacada em verde esmeralda com o rótulo **DOAÇÃO**, substituindo o formato padrão em Reais (R$).
