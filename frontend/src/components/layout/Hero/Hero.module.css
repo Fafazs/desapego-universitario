@@ -217,7 +217,7 @@
   }
 }
 
-/* Mobile: Ajusta textos, padding e recolhe os cards */
+/* Mobile: Ajusta textos, padding e recolhe os cards de forma agressiva */
 @media (max-width: 768px) {
   .hero {
     padding-top: 5rem;
@@ -225,38 +225,72 @@
   }
   .title { font-size: 1.8rem; }
   .description { font-size: 1rem; }
-  .imageWrapper { max-width: 380px; } /* Encolhe o estudante para caber */
   
-  /* Reduz os cards flutuantes para não cobrir o estudante inteiro */
-  .cardTop {
-    top: 5%;
-    left: -5%;
-    padding: 0.5rem 0.75rem;
+  /* Encolhe o estudante para caber bem no celular */
+  .imageWrapper { max-width: 320px; } 
+  
+  /* Trava os cards num tamanho enxuto sem usar widht fixo gigante */
+  .floatingCard {
+    max-width: 150px; 
+    padding: 0.5rem;
+    gap: 0.4rem;
   }
+
+  .cardTop {
+    top: 8%;
+    left: -15px; /* Puxa um pouco para fora da imagem principal */
+  }
+  
   .cardBottom {
     bottom: 5%;
-    right: -5%;
-    padding: 0.75rem;
+    right: -15px; /* Puxa para a beirada direita */
   }
-  .cardTop svg { width: 18px; height: 18px; }
-  .floatingCard strong { font-size: 0.8rem !important; }
-  .floatingCard p { font-size: 0.65rem !important; }
-  .cardTag { font-size: 0.55rem; }
-  .iconShowcase span { font-size: 1rem !important; }
+  
+  /* Diminui todos os elementos internos dos cards flutuantes */
+  .cardTop svg { width: 16px; height: 16px; }
+  .floatingCard strong { font-size: 0.75rem !important; }
+  .floatingCard p { font-size: 0.6rem !important; line-height: 1.2; }
+  .cardBottom h4 { font-size: 0.7rem !important; margin: 0.2rem 0 !important; }
+  .cardTag { font-size: 0.5rem; padding: 0.2rem 0.4rem; }
+  .iconShowcase { padding: 0.2rem; }
+  .iconShowcase span { font-size: 0.85rem !important; }
 }
 
-/* Telas muito pequenas (iPhone SE, etc) */
-@media (max-width: 480px) {
-  .actions {
-    flex-direction: column;
-    width: 100%;
+/* Telas ultra pequenas (aparelhos antigos ou muito estreitos, < 400px) */
+@media (max-width: 400px) {
+  .hero {
+    padding-top: 4rem;
   }
-  .btnPrimary, .btnSecondary {
-    width: 100%;
-    justify-content: center;
+
+  .title { 
+    font-size: 1.5rem; /* Título um pouco menor para evitar quebras estranhas */
   }
-  .cardTop, .cardBottom {
-    left: 0;
-    right: 0;
+  
+  .imageWrapper { 
+    max-width: 210px; /* Encolhe a imagem principal para liberar as laterais */
   }
+  
+  .floatingCard {
+    max-width: 125px; /* Deixa os cards mais fininhos */
+    padding: 0.35rem; /* Tira quase todo o respiro interno */
+  }
+
+  .cardTop {
+    top: -5%;
+    left: -12%; /* Empurra para o limite esquerdo da tela */
+  }
+  
+  .cardBottom {
+    bottom: -5%;
+    right: -12%; /* Empurra para o limite direito da tela */
+  }
+  
+  /* Micro-ajustes nas fontes para caber no novo limite de 125px */
+  .cardTop svg { width: 14px; height: 14px; }
+  .floatingCard strong { font-size: 0.65rem !important; }
+  .floatingCard p { font-size: 0.55rem !important; }
+  .cardBottom h4 { font-size: 0.6rem !important; margin: 0.15rem 0 !important; }
+  .cardTag { font-size: 0.45rem; padding: 0.15rem 0.3rem; }
+  .iconShowcase { padding: 0.15rem; }
+  .iconShowcase span { font-size: 0.75rem !important; }
 }
