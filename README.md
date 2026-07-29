@@ -8,6 +8,73 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 
+
+## 🌐 Links de Produção (Deploy)
+
+Acesse a aplicação rodando em produção através dos links abaixo:
+
+* **📱 Frontend (PWA - Vercel):** [https://desapego-universitario-rose.vercel.app](https://desapego-universitario-rose.vercel.app/)
+* **⚙️ Backend (API RESTful - Render):** [https://desapego-universitario-api.onrender.com](https://desapego-universitario-api.onrender.com/)
+
+> **Nota:** Como o backend está hospedado no plano gratuito do Render, a primeira requisição pode demorar alguns segundos para "acordar" o servidor.
+
+## Como Executar o Projeto Localmente
+
+Siga os passos abaixo para rodar a aplicação completa (Frontend e Backend) no seu ambiente de desenvolvimento.
+
+### Pré-requisitos
+* [Node.js](https://nodejs.org/) (v18 ou superior)
+* [Git](https://git-scm.com/)
+* Gerenciador de pacotes (`npm` ou `yarn`)
+
+### Passo 1: Clonar o repositório
+
+Abra o seu terminal e execute:
+
+```bash
+git clone [https://github.com/Fafazs/desapego-universitario.git](https://github.com/Fafazs/desapego-universitario.git)
+cd desapego-universitario
+```
+
+### Passo 2: Configurar e Rodar o Backend (API Node.js)
+
+Abra o terminal na pasta do backend, instale as dependências e configure as variáveis de ambiente:
+
+```bash
+cd backend
+npm install
+```
+
+Crie um arquivo chamado `.env` na raiz da pasta `backend` com as seguintes credenciais (solicite as chaves do banco de dados ao desenvolvedor ou use o seu próprio projeto Supabase):
+
+```env
+PORT=3000
+JWT_SECRET=sua_chave_secreta_jwt_aqui
+SUPABASE_URL=[https://sua-url-do-supabase.supabase.co](https://sua-url-do-supabase.supabase.co)
+SUPABASE_SERVICE_KEY=sua_service_role_key_aqui
+```
+
+Inicie o servidor de desenvolvimento:
+
+```bash
+npm run dev
+```
+O backend estará rodando em `http://localhost:3000`.
+
+### Passo 3: Configurar e Rodar o Frontend (React + Vite)
+
+Abra uma nova aba no terminal, navegue até a pasta do frontend e instale as dependências:
+
+```bash
+cd frontend
+npm install
+```
+Inicie o servidor do React/Vite:
+
+```bash
+npm run dev
+```
+O frontend estará acessível em `http://localhost:5173`.
 ---
 
 ## 📑 Índice
