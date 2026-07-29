@@ -4,7 +4,7 @@ import { useModalStore } from '../../store/useModalStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useAdStore } from '../../store/useAdStore';
 import { api } from '../../services/api';
-import type { Ad } from '../../types/ad';
+import type { Ad } from '../../types/Ad';
 import styles from './Modal.module.css';
 
 export const CreateAdModal: React.FC = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { X, MessageCircle, Lock, User, GraduationCap } from 'lucide-react';
 import { useModalStore } from '../../store/useModalStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import type { Ad } from '../../types/ad';
+import type { Ad } from '../../types/Ad';
 import styles from './Modal.module.css';
 
 export const AdDetailModal: React.FC = () => {

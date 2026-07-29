@@ -3,7 +3,7 @@ import { X, Loader2 } from 'lucide-react';
 import { useModalStore } from '../../store/useModalStore';
 import { useAdStore } from '../../store/useAdStore';
 import { api } from '../../services/api';
-import type { Ad } from '../../types/ad'; // <-- IMPORTANTE: Importamos a tipagem Ad
+import type { Ad } from '../../types/Ad'; // <-- IMPORTANTE: Importamos a tipagem Ad
 import styles from './Modal.module.css';
 
 export const EditAdModal: React.FC = () => {

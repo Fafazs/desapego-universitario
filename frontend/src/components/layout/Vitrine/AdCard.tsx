@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageCircle, Lock, User, GraduationCap, Trash2, Edit } from 'lucide-react';
-import type { Ad } from '../../../types/ad';
+import type { Ad } from '../../../types/Ad';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { useModalStore } from '../../../store/useModalStore';
 import { useAdStore } from '../../../store/useAdStore';

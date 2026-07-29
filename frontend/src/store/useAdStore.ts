@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Ad } from '../types/ad';
+import type { Ad } from '../types/Ad';
 
 interface AdState {
   ads: Ad[];
