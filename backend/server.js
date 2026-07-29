@@ -14,11 +14,11 @@ app.use(express.json());
 const authRoutes = require('./src/routes/authRoutes');
 
 // Usa as rotas (Prefixo padrão: /api/auth)
-app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 
 // Importa as rotas de anúncios
 const adRoutes = require('./src/routes/adRoutes');
-app.use('/api/ads', adRoutes);
+app.use('/ads', adRoutes);
 
 // Em breve, nossas rotas entrarão aqui!
 app.get('/', (req, res) => {
