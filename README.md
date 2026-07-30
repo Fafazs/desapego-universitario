@@ -74,7 +74,63 @@ Inicie o servidor do React/Vite:
 ```bash
 npm run dev
 ```
-O frontend estará acessível em `http://localhost:5173`.
+## 🛠️ Tecnologias, Frameworks e Bibliotecas
+
+A arquitetura do **Desapego Universitário** foi projetada visando alto desempenho, segurança, tipagem estática e custo zero de infraestrutura. Abaixo está a relação das principais ferramentas utilizadas no ecossistema:
+
+### 📱 Frontend (PWA - Progressive Web App)
+
+| Tecnologia / Biblioteca | Função no Projeto |
+| :--- | :--- |
+| **[React](https://react.dev/)** | Biblioteca principal para construção da interface de usuário reativa e componente-based. |
+| **[TypeScript](https://www.typescriptlang.org/)** | Adição de tipagem estática para evitar erros em tempo de compilação e melhorar o autocomplete/DX. |
+| **[Vite](https://vitejs.dev/)** | *Build tool* e servidor de desenvolvimento ultra-rápido com suporte nativo a ESM. |
+| **[Zustand](https://zustand-demo.pmnd.rs/)** | Gerenciamento de estado global leve e simplificado (Store de Autenticação, Anúncios e Modais). |
+| **[CSS Modules](https://github.com/css-modules/css-modules)** | Estilização modularizada e escopada por componente, evitando vazamento de regras globais. |
+| **[Lucide React](https://lucide.dev/)** | Conjunto de ícones leves, modernos e vetoriais para a UI. |
+| **PWA (Service Worker + Manifest)** | Permite o funcionamento offline básico e a instalação da aplicação na tela inicial do dispositivo. |
+
+---
+
+### ⚙️ Backend (API RESTful)
+
+| Tecnologia / Biblioteca | Função no Projeto |
+| :--- | :--- |
+| **[Node.js](https://nodejs.org/)** | Ambiente de execução JavaScript no lado do servidor. |
+| **[Express](https://expressjs.com/pt-br/)** | Framework web leve para estruturação de rotas, middlewares e Controllers (Padrão MVC). |
+| **[JSON Web Token (JWT)](https://jwt.io/)** | Autenticação *stateless* e proteção de rotas privadas via cabeçalho `Authorization: Bearer`. |
+| **[bcrypt](https://github.com/kelektiv/node.bcrypt.js#readme)** | Algoritmo de hashing seguro para criptografia e verificação de senhas de usuários. |
+| **[Multer](https://github.com/expressjs/multer)** | Middleware para processamento e manipulação de requisições multipartes (`multipart/form-data`) de imagens. |
+| **[CORS](https://github.com/expressjs/cors)** | Middleware para controle e permissão de requisições cross-origin entre Frontend e Backend. |
+
+---
+
+### 🗄️ Banco de Dados & Storage (Nuvem)
+
+| Tecnologia / Biblioteca | Função no Projeto |
+| :--- | :--- |
+| **[PostgreSQL](https://www.postgresql.org/)** | Banco de dados relacional para persistência dos dados de usuários e anúncios (3ª Forma Normal). |
+| **[Supabase Database](https://supabase.com/)** | Instância e hospedagem gerenciada do PostgreSQL na nuvem. |
+| **[Supabase Storage](https://supabase.com/storage)** | Bucket em nuvem para upload físico e armazenamento dos arquivos de imagem dos produtos. |
+| **[@supabase/supabase-js](https://github.com/supabase/supabase-js)** | SDK oficial para comunicação segura entre a API Node.js e o Storage/Database. |
+
+---
+
+### ☁️ Infraestrutura & Deploy
+
+| Plataforma | Utilização no Projeto |
+| :--- | :--- |
+| **[Vercel](https://vercel.com/)** | Hospedagem de alta performance e deploy contínuo do **Frontend React (PWA)** com suporte a HTTPS. |
+| **[Render](https://render.com/)** | Hospedagem em ambiente Linux do servidor **Backend Node.js/Express**. |
+| **[GitHub](https://github.com/)** | Controle de versão do código-fonte e gatilho de CI/CD para os deploys. |
+
+---
+
+### 🧪 Ferramentas de Desenvolvimento & Testes
+
+* **[Postman](https://www.postman.com/):** Validação dos endpoints HTTP, testes de regras de autorização (JWT) e simulação do CRUD completo da API.
+* **[Draw.io](https://app.diagrams.net/):** Modelagem visual dos diagramas de Engenharia de Software (Casos de Uso e Atividades).
+* **[Git](https://git-scm.com/):** Gerenciamento de ramificações, commits e histórico de código.
 ---
 
 ## 📑 Índice
