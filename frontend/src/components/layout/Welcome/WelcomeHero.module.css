@@ -136,7 +136,7 @@
   z-index: 2; 
   transform: scaleX(-1);
   /* Ajuste fino na margem inferior para os pés ficarem bem perto da base do círculo */
-  margin-bottom: 5px; 
+  margin-bottom: 5cdpx; 
   animation: floatFlipped 6s ease-in-out infinite;
 }
 
