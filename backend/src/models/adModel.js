@@ -171,11 +171,16 @@ const deleteAd = async (id) => {
 const updateAd = async (id, title, description, category, price, imageUrl) => {
   const query = `
     UPDATE ads 
-    SET title = $1, description = $2, category = $3, price = $4, image_url = $5 
+    SET title = $1, 
+        description = $2, 
+        category = $3, 
+        price = $4, 
+        image_url = COALESCE($5, image_url) 
     WHERE id = $6 
     RETURNING *
   `;
-  const values = [title, description, category, price, imageUrl, id];
+  // Se imageUrl for undefined no JS, convertemos para null para o PostgreSQL interpretar no COALESCE
+  const values = [title, description, category, price, imageUrl || null, id];
   const result = await db.query(query, values);
   return result.rows[0];
 };
