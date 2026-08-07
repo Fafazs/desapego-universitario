@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, ShieldCheck, Sparkles } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Sparkles, BookOpen, Laptop, HeartHandshake } from 'lucide-react';
 import { useModalStore } from '../../../store/useModalStore';
 import styles from './Hero.module.css';
 import student from '../../../assets/studentA.png';
@@ -18,12 +18,12 @@ export const Hero: React.FC = () => {
           </div>
 
           <h1 className={styles.title}>
-            Desapegue do que não usa. <br />
-            Encontre o que <span className={styles.highlight}>precisa</span>.
+            Desapegue, Venda ou <span className={styles.highlight}>Doe</span>. <br />
+            O ciclo não para.
           </h1>
 
           <p className={styles.description}>
-            O marketplace universitário seguro onde você compra e vende livros, calculadoras, móveis e eletrônicos direto com colegas do seu próprio campus.
+            O marketplace universitário onde você compra, vende e <strong>doa</strong> livros, calculadoras e equipamentos direto com colegas do seu campus, fomentando a economia circular e a inclusão.
           </p>
 
           <div className={styles.actions}>
@@ -36,16 +36,18 @@ export const Hero: React.FC = () => {
               className={styles.btnSecondary}
               onClick={() => openModal('register')}
             >
-              Cadastre-se Grátis
+              <HeartHandshake size={20} />
+              Quero Desapegar
             </button>
           </div>
         </div>
-         {/* Container da Imagem com Widgets Flutuantes */}
+        
+        {/* Container da Imagem com Widgets Flutuantes */}
         <div className={styles.illustration}>
           <div className={styles.imageWrapper}>
             
-            {/* Fundo decorativo para destacar o estudante */}
-            <div className={styles.imageBackdrop}></div>
+            {/* NOVO: Backdrop Futurista (Efeito Vidro) */}
+            <div className={styles.glassBackdrop}></div>
             
             <img src={student} alt="Estudante" className={styles.studentImage} />
             
@@ -55,25 +57,27 @@ export const Hero: React.FC = () => {
               <div>
                 <strong style={{ color: 'var(--text-primary)', fontSize: '0.9rem', display: 'block' }}>Conexão Direta</strong>
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>
-                  Negocie pelo WhatsApp
+                  Via WhatsApp ou E-mail
                 </p>
               </div>
             </div>
 
             {/* Widget Flutuante 2: Economia Circular (Base Direita) */}
             <div className={`${styles.floatingCard} ${styles.cardBottom}`}>
-              <span className={styles.cardTag}>Economia Circular</span>
+              <span className={styles.cardTag}>Impacto Social</span>
               <h4 style={{ marginTop: '0.4rem', marginBottom: '0.5rem', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
-                Apoie colegas do curso
+                Apoie seus colegas
               </h4>
               <div className={styles.iconShowcase}>
-                <span style={{ fontSize: '1.25rem' }}>📚 💻 🔬</span>
+                <BookOpen size={18} color="var(--primary)" />
+                <Laptop size={18} color="var(--primary)" />
+                <HeartHandshake size={18} color="var(--primary)" />
               </div>
             </div>
 
           </div>
         </div>
-         
+          
       </div>
     </section>
   );

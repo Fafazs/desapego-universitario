@@ -1,13 +1,27 @@
 .vitrine {
-  padding: 3rem 1.5rem;
   max-width: 1200px;
-  margin: 0 auto;
+  
+  /* Retiramos a margem negativa. Volta ao fluxo normal. */
+  margin: 0 auto; 
+  
+  /* Espaçamento superior mais curto para conectar melhor com o banner */
+  padding: 2rem 1.5rem 4rem;
+  
+  /* Removemos o estilo de cartão branco para integrar com a página */
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  
+  position: relative;
+  z-index: 1;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem; 
 }
+
+/* Mantenha todo o resto das suas classes inalteradas a partir daqui (title, subtitle, etc) */
 
 .title {
   font-size: 2rem;
@@ -24,15 +38,14 @@
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  background-color: transparent; /* Removemos o fundo de card se quiser deixar igual a referência, mas se quiser manter, pode deixar */
   margin-bottom: 2.5rem;
 }
 
 .searchBar {
   position: relative;
-  max-width: 600px;
-  margin: 0 auto;
   width: 100%;
+  margin-bottom: 1.5rem; /* Espaço entre a busca e as abas */
 }
 
 .searchInput {
@@ -111,4 +124,93 @@
 .emptyStateIcon {
   margin-bottom: 1rem;
   color: var(--text-secondary);
+}
+
+.advancedFiltersPanel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background-color: var(--bg-card, #ffffff);
+  padding: 1.5rem;
+  border-radius: var(--radius, 8px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  margin-top: 0.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.filterHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  padding-bottom: 1rem;
+}
+
+.resultsCount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary, #475569);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.filterGroup label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.select {
+  padding: 0.65rem;
+  border-radius: var(--radius, 8px);
+  border: 1px solid var(--border-color, #e2e8f0);
+  background-color: var(--surface-50, #f8fafc);
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.select:focus {
+  border-color: var(--primary, #2563eb);
+}
+
+/* Toggle Botões (Extraídos para o CSS para deixar o JSX mais limpo) */
+.toggleWrapper {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  background: var(--surface-50, #f8fafc);
+  padding: 0.35rem;
+  border-radius: 0.5rem;
+  width: fit-content;
+}
+
+.toggleBtn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-weight: 500;
+  background: transparent;
+  color: var(--text-secondary, #64748b);
+  transition: all 0.2s;
+}
+
+.toggleBtnActive {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-weight: 500;
+  background: var(--primary, #2563eb);
+  color: white;
+  transition: all 0.2s;
 }

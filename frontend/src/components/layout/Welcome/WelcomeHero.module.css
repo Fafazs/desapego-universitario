@@ -1,0 +1,198 @@
+.welcomeHero {
+  background: linear-gradient(135deg, #0F172A 0%, #1D4ED8 100%);
+  padding: 5rem 1.5rem 4rem; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container {
+  max-width: 1100px; /* Alargado para comportar as duas colunas */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row; /* Lado a lado no Desktop */
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --- LADO ESQUERDO: TEXTOS --- */
+.textContent {
+  flex: 1;
+  text-align: left; /* Alinhamento elegante à esquerda */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.15); 
+  color: #ffffff;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  backdrop-filter: blur(4px); 
+}
+
+.title {
+  font-size: 3rem; /* Fonte maior para impactar mais no Desktop */
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+}
+
+.highlight {
+  color: #93C5FD; 
+}
+
+.description {
+  font-size: 1.15rem;
+  color: #e2e8f0; 
+  margin-bottom: 2.5rem;
+  max-width: 500px; /* Mantém a linha de texto curta e confortável de ler */
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+}
+
+.btnPrimary {
+  background-color: #ffffff;
+  color: #1D4ED8;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--radius, 8px);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btnPrimary:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* --- LADO DIREITO: IMAGEM --- */
+.imageContent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  /* Alinhamento inferior crucial para o efeito de portal */
+  align-items: flex-end; 
+  position: relative;
+  /* Reduzi o min-height para se ajustar ao círculo menor e à imagem maior */
+  min-height: 350px; 
+}
+
+/* NOVO: Vidro perfeitamente redondo, MENOR e mais focado na base */
+.glassBackdrop {
+  position: absolute;
+  /* Centralizamos e definimos dimensões menores e iguais para o círculo perfeito */
+  bottom: 0%; 
+  left: 50%;
+  transform: translateX(-50%); /* Centraliza horizontalmente */
+  width: 260px; 
+  height: 260px; 
+  
+  /* Degradê invertido e suave mantido */
+  background: linear-gradient(
+    180deg, 
+    rgba(255, 255, 255, 0.0) 0%,   
+    rgba(255, 255, 255, 0.05) 50%,   
+    rgba(255, 255, 255, 0.15) 100% 
+  );
+  
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); 
+  
+  /* Círculo perfeito */
+  border-radius: 50%; 
+  z-index: 1;
+  
+  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.studentImage {
+  width: 100%;
+  max-width: 550px; 
+  /* A imagem do estudante agora é MAIOR e preenche o círculo menor */
+  position: relative;
+  z-index: 2; 
+  transform: scaleX(-1);
+  /* Ajuste fino na margem inferior para os pés ficarem bem perto da base do círculo */
+  margin-bottom: 5px; 
+  animation: floatFlipped 6s ease-in-out infinite;
+}
+
+@keyframes floatFlipped {
+  0% { transform: scaleX(-1) translateY(0px); }
+  50% { transform: scaleX(-1) translateY(-15px); }
+  100% { transform: scaleX(-1) translateY(0px); }
+}
+
+/* --- RESPONSIVIDADE (Telas menores) --- */
+@media (max-width: 992px) {
+  /* Mantendo o layout empilhado e centralizado para tablet/mobile */
+  .container {
+    flex-direction: column-reverse; 
+    text-align: center;
+    gap: 2.5rem;
+  }
+
+  .textContent {
+    align-items: center;
+    text-align: center;
+  }
+
+  .imageContent {
+    min-height: 290px;
+  }
+
+  /* Reduzindo ainda mais as dimensões proporcionais no mobile */
+  .glassBackdrop {
+    width: 220px; 
+    height: 220px;
+  }
+
+  .studentImage {
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mantendo os ajustes mobile existentes e aplicando as novas proporções */
+  .title { font-size: 2.2rem; }
+  .description { font-size: 1.05rem; }
+  .welcomeHero { padding: 4rem 1.5rem 3rem; } 
+  
+  .imageContent {
+    min-height: 250px;
+  }
+
+  /* Dimensões ainda menores no celular */
+  .glassBackdrop {
+    width: 180px; 
+    height: 180px;
+  }
+
+  .studentImage {
+    max-width: 320px;
+    margin-bottom: 10px;
+  }
+}

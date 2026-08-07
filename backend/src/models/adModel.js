@@ -11,29 +11,151 @@ const createAd = async (title, description, category, price, imageUrl, userId) =
   return result.rows[0];
 };
 
-const getAllAds = async (category) => {
-  // Busca anúncios e junta com o nome e whatsapp do dono
+const getAllAds = async (filters) => {
+  const { category, course, search, priceRange, sortBy, limit, offset } = filters;
+
   let query = `
-    SELECT ads.*, users.name AS seller_name, users.whatsapp AS seller_whatsapp 
-    FROM ads 
+    SELECT ads.*, 
+           users.name AS seller_name, 
+           users.whatsapp AS seller_whatsapp,
+           users.course AS user_course
+    FROM ads
     JOIN users ON ads.user_id = users.id
+    WHERE 1=1
   `;
   const values = [];
+  let valueCount = 1;
 
-  // Se o usuário clicou num filtro, adiciona a regra na busca
-  if (category) {
-    query += ` WHERE ads.category = $1`;
+  // --- FILTROS INTELIGENTES ---
+  if (category && category !== 'Todos') { // Corrigido de 'Tudo' para 'Todos'
+    query += ` AND ads.category = $${valueCount}`;
     values.push(category);
+    valueCount++;
   }
 
-  query += ` ORDER BY ads.created_at DESC`; // Mais recentes primeiro
+  if (course && course !== 'Todos') {
+    query += ` AND users.course = $${valueCount}`;
+    values.push(course);
+    valueCount++;
+  }
+
+  if (search) {
+    query += ` AND (ads.title ILIKE $${valueCount} OR ads.description ILIKE $${valueCount})`;
+    values.push(`%${search}%`);
+    valueCount++;
+  }
+
+  if (priceRange) {
+    if (priceRange === 'Doação') {
+      query += ` AND ads.price = 0`;
+    } else if (priceRange === 'Até R$ 50') {
+      query += ` AND ads.price > 0 AND ads.price <= 50`;
+    } else if (priceRange === 'Até R$ 100') {
+      query += ` AND ads.price > 0 AND ads.price <= 100`;
+    } else if (priceRange === 'Até R$ 200') {
+      query += ` AND ads.price > 0 AND ads.price <= 200`;
+    }
+  }
+
+  // --- ORDENAÇÃO ---
+  if (sortBy === 'Mais Antigos') {
+    query += ` ORDER BY ads.created_at ASC`;
+  } else if (sortBy === 'Menor Preço') {
+    query += ` ORDER BY ads.price ASC`;
+  } else if (sortBy === 'Maior Preço') {
+    query += ` ORDER BY ads.price DESC`;
+  } else {
+    query += ` ORDER BY ads.created_at DESC`;
+  }
+
+  // --- PAGINAÇÃO ---
+  if (limit) {
+    query += ` LIMIT $${valueCount}`;
+    values.push(parseInt(limit));
+    valueCount++;
+  }
+  
+  if (offset) {
+    query += ` OFFSET $${valueCount}`;
+    values.push(parseInt(offset));
+    valueCount++;
+  }
 
   const result = await db.query(query, values);
   return result.rows;
 };
 
-const getAdsByUser = async (userId) => {
-  const result = await db.query('SELECT * FROM ads WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
+// 👇 A MÁGICA ACONTECE AQUI 👇
+const getAdsByUser = async (userId, filters) => {
+  // Garantimos que 'filters' será um objeto vazio caso nada seja passado
+  const { category, course, search, priceRange, sortBy, limit, offset } = filters || {};
+
+  let query = `
+    SELECT ads.*, 
+           users.name AS seller_name, 
+           users.whatsapp AS seller_whatsapp,
+           users.course AS user_course
+    FROM ads
+    JOIN users ON ads.user_id = users.id
+    WHERE ads.user_id = $1 
+  `;
+  
+  const values = [userId];
+  let valueCount = 2; // Começa no 2, porque o $1 já é o userId!
+
+  if (category && category !== 'Todos') {
+    query += ` AND ads.category = $${valueCount}`;
+    values.push(category);
+    valueCount++;
+  }
+
+  if (course && course !== 'Todos') {
+    query += ` AND users.course = $${valueCount}`;
+    values.push(course);
+    valueCount++;
+  }
+
+  if (search) {
+    query += ` AND (ads.title ILIKE $${valueCount} OR ads.description ILIKE $${valueCount})`;
+    values.push(`%${search}%`);
+    valueCount++;
+  }
+
+  if (priceRange) {
+    if (priceRange === 'Doação') {
+      query += ` AND ads.price = 0`;
+    } else if (priceRange === 'Até R$ 50') {
+      query += ` AND ads.price > 0 AND ads.price <= 50`;
+    } else if (priceRange === 'Até R$ 100') {
+      query += ` AND ads.price > 0 AND ads.price <= 100`;
+    } else if (priceRange === 'Até R$ 200') {
+      query += ` AND ads.price > 0 AND ads.price <= 200`;
+    }
+  }
+
+  if (sortBy === 'Mais Antigos') {
+    query += ` ORDER BY ads.created_at ASC`;
+  } else if (sortBy === 'Menor Preço') {
+    query += ` ORDER BY ads.price ASC`;
+  } else if (sortBy === 'Maior Preço') {
+    query += ` ORDER BY ads.price DESC`;
+  } else {
+    query += ` ORDER BY ads.created_at DESC`;
+  }
+
+  if (limit) {
+    query += ` LIMIT $${valueCount}`;
+    values.push(parseInt(limit));
+    valueCount++;
+  }
+  
+  if (offset) {
+    query += ` OFFSET $${valueCount}`;
+    values.push(parseInt(offset));
+    valueCount++;
+  }
+
+  const result = await db.query(query, values);
   return result.rows;
 };
 

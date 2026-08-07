@@ -232,3 +232,62 @@
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
+
+/* --- Novas Classes para Validação do Registro --- */
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.checkIcon {
+  position: absolute;
+  right: 12px;
+  color: #22c55e; /* Verde sucesso */
+  pointer-events: none;
+}
+
+/* Ícone de check para o select precisa de um pequeno ajuste por causa da setinha nativa */
+.checkIconSelect {
+  position: absolute;
+  right: 30px; 
+  color: #22c55e;
+  pointer-events: none;
+}
+
+.inputError {
+  border-color: #ef4444 !important; /* Vermelho erro */
+  background-color: #fef2f2 !important;
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 2px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+/* Barra de força de senha */
+.passwordBarContainer {
+  height: 4px;
+  width: 100%;
+  background-color: #e2e8f0;
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.passwordBarFill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Estado desabilitado do botão */
+.btnSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #94a3b8; /* Cor cinza para indicar bloqueio */
+}

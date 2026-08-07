@@ -44,12 +44,23 @@ const create = async (req, res) => {
 // 2. LISTAR TODOS
 const listAll = async (req, res) => {
   try {
-    const category = req.query.category; // Aproveitando que seu model suporta isso!
-    const ads = await adModel.getAllAds(category); 
+    // Extrai tudo que vem na URL (Query Params)
+    const filters = {
+      category: req.query.category,
+      course: req.query.course,
+      search: req.query.search,
+      priceRange: req.query.priceRange,
+      sortBy: req.query.sortBy,
+      limit: req.query.limit || 9, // Traz 9 por vez como padrão
+      offset: req.query.offset || 0  // Pula 0 por padrão (página 1)
+    };
+    
+    // Passa o objeto inteiro de filtros para o model
+    const ads = await adModel.getAllAds(filters); 
     res.status(200).json(ads);
   } catch (error) {
-    console.error('Erro ao listar todos:', error);
-    res.status(500).json({ error: 'Erro ao buscar anúncios.' });
+    console.error('Erro ao listar todos com filtros:', error);
+    res.status(500).json({ error: 'Erro ao buscar anúncios avançados.' });
   }
 };
 
@@ -57,7 +68,20 @@ const listAll = async (req, res) => {
 const listMine = async (req, res) => {
   try {
     const userId = req.user.id;
-    const ads = await adModel.getAdsByUser(userId); // <-- Nome corrigido batendo com seu model!
+    
+    // 👇 ADICIONADO: Extração dos mesmos filtros utilizados na listAll 👇
+    const filters = {
+      category: req.query.category,
+      course: req.query.course,
+      search: req.query.search,
+      priceRange: req.query.priceRange,
+      sortBy: req.query.sortBy,
+      limit: req.query.limit || 9,
+      offset: req.query.offset || 0
+    };
+
+    // 👇 ADICIONADO: Passando os filtros como segundo argumento 👇
+    const ads = await adModel.getAdsByUser(userId, filters); 
     res.status(200).json(ads);
   } catch (error) {
     console.error('Erro ao listar meus anúncios:', error);
@@ -106,7 +130,6 @@ const remove = async (req, res) => {
   }
 };
 
-// EXPORTANDO AS FUNÇÕES CORRETAMENTE
 module.exports = {
   create,
   listAll,

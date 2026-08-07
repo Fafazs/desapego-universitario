@@ -10,6 +10,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 // Rota para listar todos (o frontend já filtra os do usuário)
 router.get('/', adController.listAll);
 
+// Rota para listar os anúncios do usuário logado
+router.get('/mine', authMiddleware, adController.listMine);
+
 // Rotas de criação, exclusão e atualização (com suporte a imagem)
 router.post('/', authMiddleware, upload.single('image'), adController.create);
 router.delete('/:id', authMiddleware, adController.remove);

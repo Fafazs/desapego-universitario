@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useModalStore } from '../../store/useModalStore';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -6,26 +6,31 @@ import { api } from '../../services/api';
 import styles from './Modal.module.css';
 
 export const LoginModal: React.FC = () => {
-  const { activeModal, closeModal, openModal } = useModalStore();
+  const { activeModal, closeModal, openModal, modalData } = useModalStore();
   const { setAuth } = useAuthStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // SE VIER E-MAIL DO CADASTRO, PREENCHE AUTOMATICAMENTE
+  useEffect(() => {
+    if (activeModal === 'login' && modalData?.email) {
+      setEmail(modalData.email);
+    }
+  }, [activeModal, modalData]);
+
   if (activeModal !== 'login') return null;
 
- const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      // O backend retorna: { message, token, user }
       setAuth(response.data.user, response.data.token);
       closeModal();
     } catch (error: any) {
-      // Mostra o erro real que veio do seu backend (ex: "Credenciais inválidas")
       alert(error.response?.data?.error || 'Erro ao fazer login');
     } finally {
       setLoading(false);
@@ -66,6 +71,7 @@ export const LoginModal: React.FC = () => {
               className={styles.input}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoFocus={!!modalData?.email}
             />
           </div>
 

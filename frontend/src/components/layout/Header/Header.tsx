@@ -28,16 +28,13 @@ export const Header: React.FC = () => {
         <div className={styles.authActions}>
           {user ? (
             <>
-              <div className={styles.greeting}>
-                <span>👋 Olá, {user.name.split(' ')[0]}</span>
-              </div>
-
+              {/* Botão discreto sem fundo azul chamativo */}
               <button 
-                className={styles.btnPrimary} 
+                className={styles.btnGhost} 
                 onClick={() => openModal('createAd')}
               >
                 <PlusCircle size={18} />
-                Criar Anúncio
+                Anunciar
               </button>
 
               <button 

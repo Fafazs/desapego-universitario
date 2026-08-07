@@ -7,6 +7,12 @@ import { api } from '../../services/api';
 import type { Ad } from '../../types/Ad';
 import styles from './Modal.module.css';
 
+// 👇 1. Importação correta do arquivo de constantes
+import { ACADEMIC_CATEGORIES } from '../../constants/academicData';
+
+// 👇 2. Removemos a opção 'Todos' para a criação do anúncio
+const VALID_CATEGORIES = ACADEMIC_CATEGORIES.filter(category => category !== 'Todos');
+
 export const CreateAdModal: React.FC = () => {
   const { activeModal, closeModal } = useModalStore();
   const { user } = useAuthStore();
@@ -20,7 +26,8 @@ export const CreateAdModal: React.FC = () => {
     title: '',
     description: '',
     price: '',
-    category: 'Livros',
+    // 👇 3. Inicia com a primeira categoria válida (Livros & Apostilas)
+    category: VALID_CATEGORIES[0] || 'Livros & Apostilas',
   });
   
   // Novos estados para o arquivo físico e o preview visual na tela
@@ -85,8 +92,13 @@ export const CreateAdModal: React.FC = () => {
 
       addAd(createdAd);
       
-      // Limpa os dados
-      setFormData({ title: '', description: '', price: '', category: 'Livros' });
+      // Limpa os dados e reseta a categoria corretamente
+      setFormData({ 
+        title: '', 
+        description: '', 
+        price: '', 
+        category: VALID_CATEGORIES[0] || 'Livros & Apostilas' 
+      });
       setImageFile(null);
       setImagePreview('');
       setIsDonation(false);
@@ -147,12 +159,17 @@ export const CreateAdModal: React.FC = () => {
 
           <div className={styles.formGroup}>
             <label className={styles.label}>Categoria</label>
-            <select className={styles.select} value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-              <option value="Livros">Livros</option>
-              <option value="Eletrônicos">Eletrônicos</option>
-              <option value="Móveis">Móveis</option>
-              <option value="Materiais">Materiais</option>
-              <option value="Outros">Outros</option>
+            <select 
+              className={styles.select} 
+              value={formData.category} 
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+            >
+              {/* 👇 4. Mapeamento dinâmico e correto das categorias */}
+              {VALID_CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
 

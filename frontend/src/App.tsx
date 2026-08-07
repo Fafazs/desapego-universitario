@@ -9,6 +9,7 @@ import { LoginModal } from './components/modals/LoginModal';
 import { RegisterModal } from './components/modals/RegisterModal';
 import { CreateAdModal } from './components/modals/CreateAdModal';
 import { EditAdModal } from './components/modals/EditAdModal';
+import { WelcomeHero } from './components/layout/Welcome/WelcomeHero';
 
 export function App() {
   const { user } = useAuthStore();
@@ -17,7 +18,7 @@ export function App() {
     <div>
       <Header />
       
-      {!user && <Hero />}
+      {user ? <WelcomeHero /> : <Hero />}
 
       <Vitrine />
 
