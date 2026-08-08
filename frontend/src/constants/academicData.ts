@@ -15,6 +15,5 @@ export const ACADEMIC_CATEGORIES = [
   'Tecnologia & Eletrônicos',// Calculadoras científicas, notebooks, adaptadores
   'Papelaria & Desenho',     // Réguas T, escalímetros, pranchetas, pastas
   'Vestuário & Acessórios',   // Camisas de curso, mochilas, casacos
-  'Doações',                 // Itens 100% gratuitos
   'Outros'
 ];

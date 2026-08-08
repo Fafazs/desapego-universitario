@@ -90,7 +90,6 @@ const listMine = async (req, res) => {
 };
 
 // 4. ATUALIZAR ANÚNCIO (Com suporte para trocar a foto)
-// 4. ATUALIZAR ANÚNCIO (Com suporte para trocar a foto)
 const update = async (req, res) => {
   try {
     const { id } = req.params;
