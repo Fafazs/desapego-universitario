@@ -90,23 +90,26 @@ const listMine = async (req, res) => {
 };
 
 // 4. ATUALIZAR ANÚNCIO (Com suporte para trocar a foto)
+// 4. ATUALIZAR ANÚNCIO (Com suporte para trocar a foto)
 const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, category, price } = req.body;
-    let imageUrl = req.body.image_url; 
+    let imageUrl = null; 
 
+    // Se o usuário enviou uma nova foto
     if (req.file) {
       const file = req.file;
       const fileName = `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`;
 
+      // CORREÇÃO: Mudado de 'ads' para 'uploads' igual na função create!
       const { data, error } = await supabase.storage
-        .from('ads')
+        .from('uploads')
         .upload(fileName, file.buffer, { contentType: file.mimetype });
 
       if (error) throw error;
 
-      const { data: publicUrlData } = supabase.storage.from('ads').getPublicUrl(fileName);
+      const { data: publicUrlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
       imageUrl = publicUrlData.publicUrl;
     }
 
@@ -114,7 +117,8 @@ const update = async (req, res) => {
     res.status(200).json(updatedAd);
   } catch (error) {
     console.error('Erro ao atualizar:', error);
-    res.status(500).json({ error: 'Erro ao atualizar anúncio.' });
+    // Agora ele vai te mostrar a mensagem real do erro no frontend!
+    res.status(500).json({ error: error.message || 'Erro ao atualizar anúncio.' });
   }
 };
 

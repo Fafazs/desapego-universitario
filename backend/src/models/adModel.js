@@ -179,9 +179,15 @@ const updateAd = async (id, title, description, category, price, imageUrl) => {
     WHERE id = $6 
     RETURNING *
   `;
-  // Se imageUrl for undefined no JS, convertemos para null para o PostgreSQL interpretar no COALESCE
+  
   const values = [title, description, category, price, imageUrl || null, id];
   const result = await db.query(query, values);
+  
+  // CORREÇÃO: A trava de segurança!
+  if (result.rowCount === 0) {
+    throw new Error("Anúncio não encontrado ou ID inválido no banco de dados.");
+  }
+  
   return result.rows[0];
 };
 
